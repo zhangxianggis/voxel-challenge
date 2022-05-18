@@ -9,6 +9,9 @@
 <p align="center">
 <img src="main.py-2022-05-18-154135.jpg" width="75%"></img>
 </p>
+<p align="center">
+<img src="equation.png" width="75%"></img>
+</p>
 
 ## Name
 送你一朵小红花
