@@ -1,21 +1,14 @@
 from scene import Scene
 import taichi as ti
 from taichi.math import *
-PI = 3.1415926535
 exposure = 1.0
 petalParts = 5
 leafParts = 4
 scene = Scene(voxel_edges=0.08, exposure=exposure)
 scene.set_floor(-0.7, (1.0, 1.0, 1.0))  # scene.set_floor(-0.7, (1, 0.8, 0.6))
 scene.set_background_color((0.8, 0.8, 1.0))
-scene.set_directional_light((1.0, 1.5, 1.0), 0.2, vec3(1.0, 1.0, 1.0) / exposure)
-
-
-@ti.func
-def rotate(pos, rotation):
-    return vec3(float(pos.x)*ti.cos(rotation)-float(pos.y)*ti.sin(rotation),
-                float(pos.x)*ti.sin(rotation)+float(pos.y)*ti.cos(rotation),
-                pos.z)
+scene.set_directional_light(
+    (1.0, 1.5, 1.0), 0.2, vec3(1.0, 1.0, 1.0) / exposure)
 
 
 @ti.func
@@ -26,8 +19,9 @@ def createPetal(pos, size, mat, color):
             z = 0.01 * d
             for offset_x, offset_y, offset_rotate in ti.ndrange((-1, 1), (-1, 1), (0, petalParts)):
                 offset = vec3(offset_x, offset_y, 0)
-                offset_rotate_ = 2 * PI * float(offset_rotate) / petalParts
-                xyz = pos + offset + rotate(vec3(x, y, z), offset_rotate_)
+                offset_rotate_ = 2 * pi * float(offset_rotate) / petalParts
+                xyz = pos + offset + \
+                    rotate3d(vec3(x, y, z), vec3(0, 0, 1), offset_rotate_)
                 scene.set_voxel(xyz, mat, color)
 
 
@@ -38,8 +32,8 @@ def createLeave(pos, size, mat, color):
             d = (x-size*0.5)**2 + (y-size*0.5)**2
             z = -0.01 * d
             for offset_rotate in ti.ndrange((0, leafParts)):
-                offset_rotate_ = 2 * PI * float(offset_rotate) / leafParts
-                xyz = rotate(vec3(x, y, z), offset_rotate_)
+                offset_rotate_ = 2 * pi * float(offset_rotate) / leafParts
+                xyz = rotate3d(vec3(x, y, z), vec3(0, 0, 1), offset_rotate_)
                 scene.set_voxel(vec3(xyz[0], xyz[2], xyz[1])+pos, mat, color)
 
 
@@ -60,7 +54,7 @@ def createTrunk(pos, radius, height, mat, color):
 @ti.func
 def createFloor():
     for i, j, k in ti.ndrange((-64, 64), (-64, 64), (-64, 64)):
-        h = 3*ti.abs(ti.sin(i/16*PI)*ti.sin(j/16*PI))-42
+        h = 3*ti.abs(ti.sin(i/16*pi)*ti.sin(j/16*pi))-42
         if k < h and k > -63:
             scene.set_voxel(vec3(i, k, j), 1, vec3(0.42, .62, 1.))
             if i % 2 == 0 and j % 2 == 0:
