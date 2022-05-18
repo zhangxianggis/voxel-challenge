@@ -5,7 +5,7 @@ exposure = 1.0
 petalParts = 5
 leafParts = 4
 scene = Scene(voxel_edges=0.08, exposure=exposure)
-scene.set_floor(-0.7, (1.0, 1.0, 1.0))  # scene.set_floor(-0.7, (1, 0.8, 0.6))
+scene.set_floor(-0.7, (1.0, 1.0, 1.0))  #scene.set_floor(-0.7, (1, 0.8, 0.6))
 scene.set_background_color((0.8, 0.8, 1.0))
 scene.set_directional_light(
     (1.0, 1.5, 1.0), 0.2, vec3(1.0, 1.0, 1.0) / exposure)
@@ -15,14 +15,17 @@ scene.set_directional_light(
 def createPetal(pos, size, mat, color):
     for x, y in ti.ndrange((0, size), (0, size)):
         if ((x/size)**2+(y/size)**2)**2-(x/size)*(y/size) <= 0:
-            d = x**2 + y**2
-            z = 0.01 * d
+            d = x**2+y**2
+            z = 0.01*d
             for offset_x, offset_y, offset_rotate in ti.ndrange((-1, 1), (-1, 1), (0, petalParts)):
                 offset = vec3(offset_x, offset_y, 0)
                 offset_rotate_ = 2 * pi * float(offset_rotate) / petalParts
-                xyz = pos + offset + \
-                    rotate3d(vec3(x, y, z), vec3(0, 0, 1), offset_rotate_)
-                scene.set_voxel(xyz, mat, color)
+                xyz = pos + offset + rotate3d(vec3(x, y, z), vec3(0.1, 0.1, 1), offset_rotate_)
+                k = 1.5
+                if (z <= 6 and x > 1/k*y and x < k*y):
+                    scene.set_voxel(xyz, mat, vec3(255/255, 153/255, 153/255))
+                else:
+                    scene.set_voxel(xyz, mat, color)
 
 
 @ti.func
@@ -66,7 +69,7 @@ def initialize_voxels():
     # Your code here! :-)
     createTrunk(vec3(0, -18, 0), 2, 18, 1, vec3(0.5, 0.25, 0.0))
     createPetal(vec3(0, 24, 0), 48, 1, vec3(1.0, 0.0, 0.0))
-    createSphere(vec3(0, 24, 0), 12, 1, vec3(1, 1, 0))
+    createSphere(vec3(0, 20, 0), 12, 1, vec3(1, 1, 0))
     createLeave(vec3(0, -20, 0), 64, 1, vec3(0.0, 1, 0.0))
     createFloor()
 
