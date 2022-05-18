@@ -1,16 +1,13 @@
 # <a name="title">Taichi Voxel Challenge</a>
 
 <p align="center">
-<img src="main.py-2022-05-15-233149.jpg" width="75%"></img>
+<img src="main.py-2022-05-18-153657.jpg" width="75%"></img>
 </p>
 <p align="center">
-<img src="main.py-2022-05-15-234825.jpg" width="75%"></img>
+<img src="main.py-2022-05-18-154725.jpg" width="75%"></img>
 </p>
 <p align="center">
-<img src="main.py-2022-05-15-234531.jpg" width="75%"></img>
-</p>
-<p align="center">
-<img src="main.py-2022-05-15-234118.jpg" width="75%"></img>
+<img src="main.py-2022-05-18-154135.jpg" width="75%"></img>
 </p>
 
 ## Name
